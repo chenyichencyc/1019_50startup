@@ -681,14 +681,18 @@
                         <div class="card-title">📈 特徵數量對回歸模型效能之影響 (Feature Count Evaluation)</div>
                         <div class="card-subtitle">依特徵重要度由 1 至 5 個逐一加入模型，評估測試集 RMSE 與 R² 變化曲線</div>
                     </div>
-                    <span class="tag tag-optimal">Optimal Model: k = 2</span>
+                    <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;">
+                        <button id="btnShowInteractive" class="btn-link" style="cursor:pointer;background:rgba(6,182,212,0.2);border-color:var(--cyan-accent);" onclick="toggleChartMode('interactive')">📊 互動圖表</button>
+                        <button id="btnShowPng" class="btn-link" style="cursor:pointer;" onclick="toggleChartMode('png')">🖼️ Matplotlib 原圖</button>
+                        <span class="tag tag-optimal">Optimal: k = 2</span>
+                    </div>
                 </div>
 
-                <div class="chart-grid dual">
+                <div id="chartInteractiveContainer" class="chart-grid dual">
                     <div class="chart-box">
                         <div class="chart-title">
                             <span>均方根誤差 (RMSE by Number of Features)</span>
-                            <span style="color:#06b6d4;font-size:0.8rem;">越低越好 ⬇</span>
+                            <span style="color:#2563eb;font-size:0.8rem;">越低越好 ⬇</span>
                         </div>
                         <div class="canvas-container">
                             <canvas id="chartRMSE"></canvas>
@@ -697,12 +701,17 @@
                     <div class="chart-box">
                         <div class="chart-title">
                             <span>決定係數 (R-squared by Number of Features)</span>
-                            <span style="color:#3b82f6;font-size:0.8rem;">越高越好 ⬆</span>
+                            <span style="color:#2563eb;font-size:0.8rem;">越高越好 ⬆</span>
                         </div>
                         <div class="canvas-container">
                             <canvas id="chartR2"></canvas>
                         </div>
                     </div>
+                </div>
+
+                <div id="chartPngContainer" style="display:none; text-align:center; padding:1.2rem; background:rgba(10,15,28,0.6); border-radius:var(--radius-md); border:1px solid rgba(255,255,255,0.06); margin-bottom:1.5rem;">
+                    <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:0.8rem;">Python Matplotlib 直接繪製生成之高解析度圖檔 (<code>features_performance.png</code>)</p>
+                    <img src="features_performance.png" alt="Python Matplotlib 原生折線圖" style="max-width:100%; height:auto; border-radius:var(--radius-sm); border:1px solid var(--border-color); box-shadow:0 8px 25px rgba(0,0,0,0.4);">
                 </div>
 
                 <div class="insight-box">
@@ -1123,24 +1132,29 @@
         Chart.defaults.font.family = "'Outfit', sans-serif";
 
         function initCharts() {
-            // 1. RMSE Chart
+            // 1. RMSE Chart (100% Matplotlib features_performance.png alignment)
             const ctxRMSE = document.getElementById('chartRMSE').getContext('2d');
             chartRMSE = new Chart(ctxRMSE, {
                 type: 'line',
                 data: {
-                    labels: [1, 2, 3, 4, 5],
                     datasets: [{
                         label: 'RMSE 均方根誤差',
-                        data: featureCountData.rmse,
-                        borderColor: '#06b6d4',
-                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
-                        pointBackgroundColor: ['#06b6d4', '#10b981', '#06b6d4', '#06b6d4', '#f43f5e'],
-                        pointBorderColor: '#fff',
-                        pointRadius: [5, 8, 5, 5, 6],
-                        pointHoverRadius: 9,
-                        borderWidth: 2.5,
-                        fill: true,
-                        tension: 0.25
+                        data: [
+                            { x: 1, y: 8274.868018 },
+                            { x: 2, y: 8198.797191 },
+                            { x: 3, y: 8309.059683 },
+                            { x: 4, y: 8409.916714 },
+                            { x: 5, y: 9137.990153 }
+                        ],
+                        borderColor: '#2563eb',
+                        backgroundColor: '#2563eb',
+                        pointBackgroundColor: '#2563eb',
+                        pointBorderColor: '#2563eb',
+                        pointRadius: 5.5,
+                        pointHoverRadius: 8,
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0 // 純直線折線，與 Matplotlib 完全一致
                     }]
                 },
                 options: {
@@ -1150,43 +1164,60 @@
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
-                                label: (ctx) => ` RMSE: $${ctx.raw.toLocaleString()}`
+                                title: (items) => `Number of Features: ${items[0].parsed.x}`,
+                                label: (ctx) => ` RMSE: ${ctx.parsed.y.toFixed(2)}`
                             }
                         }
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: '特徵數量 (Number of Features)' },
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                            type: 'linear',
+                            min: 0.8,
+                            max: 5.2,
+                            title: { display: true, text: 'Number of Features', font: { size: 13, weight: 'bold' } },
+                            ticks: {
+                                stepSize: 0.5,
+                                callback: (val) => val.toFixed(1)
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.08)' }
                         },
                         y: {
-                            title: { display: true, text: 'RMSE (越低越好)' },
-                            min: 8000,
-                            max: 9300,
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                            min: 8150,
+                            max: 9185,
+                            title: { display: true, text: 'RMSE', font: { size: 13, weight: 'bold' } },
+                            ticks: {
+                                stepSize: 200,
+                                callback: (val) => val.toFixed(0)
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.08)' }
                         }
                     }
                 }
             });
 
-            // 2. R2 Chart
+            // 2. R2 Chart (100% Matplotlib features_performance.png alignment)
             const ctxR2 = document.getElementById('chartR2').getContext('2d');
             chartR2 = new Chart(ctxR2, {
                 type: 'line',
                 data: {
-                    labels: [1, 2, 3, 4, 5],
                     datasets: [{
-                        label: 'R² 決定係數',
-                        data: featureCountData.r2,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        pointBackgroundColor: ['#3b82f6', '#10b981', '#3b82f6', '#3b82f6', '#f43f5e'],
-                        pointBorderColor: '#fff',
-                        pointRadius: [5, 8, 5, 5, 6],
-                        pointHoverRadius: 9,
-                        borderWidth: 2.5,
-                        fill: true,
-                        tension: 0.25
+                        label: 'R-squared 決定係數',
+                        data: [
+                            { x: 1, y: 0.946459 },
+                            { x: 2, y: 0.947439 },
+                            { x: 3, y: 0.946015 },
+                            { x: 4, y: 0.944697 },
+                            { x: 5, y: 0.934707 }
+                        ],
+                        borderColor: '#2563eb',
+                        backgroundColor: '#2563eb',
+                        pointBackgroundColor: '#2563eb',
+                        pointBorderColor: '#2563eb',
+                        pointRadius: 5.5,
+                        pointHoverRadius: 8,
+                        borderWidth: 2,
+                        fill: false,
+                        tension: 0 // 純直線折線，與 Matplotlib 完全一致
                     }]
                 },
                 options: {
@@ -1196,20 +1227,32 @@
                         legend: { display: false },
                         tooltip: {
                             callbacks: {
-                                label: (ctx) => ` R-squared: ${ctx.raw.toFixed(4)}`
+                                title: (items) => `Number of Features: ${items[0].parsed.x}`,
+                                label: (ctx) => ` R-squared: ${ctx.parsed.y.toFixed(6)}`
                             }
                         }
                     },
                     scales: {
                         x: {
-                            title: { display: true, text: '特徵數量 (Number of Features)' },
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                            type: 'linear',
+                            min: 0.8,
+                            max: 5.2,
+                            title: { display: true, text: 'Number of Features', font: { size: 13, weight: 'bold' } },
+                            ticks: {
+                                stepSize: 0.5,
+                                callback: (val) => val.toFixed(1)
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.08)' }
                         },
                         y: {
-                            title: { display: true, text: 'R-squared (越高越好)' },
-                            min: 0.932,
-                            max: 0.950,
-                            grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                            min: 0.934,
+                            max: 0.9481,
+                            title: { display: true, text: 'R-squared', font: { size: 13, weight: 'bold' } },
+                            ticks: {
+                                stepSize: 0.002,
+                                callback: (val) => val.toFixed(3)
+                            },
+                            grid: { color: 'rgba(255, 255, 255, 0.08)' }
                         }
                     }
                 }
@@ -1323,6 +1366,30 @@
                     }
                 }
             });
+        }
+
+        // Toggle between interactive Chart.js and native Matplotlib PNG
+        function toggleChartMode(mode) {
+            const interactiveEl = document.getElementById('chartInteractiveContainer');
+            const pngEl = document.getElementById('chartPngContainer');
+            const btnInteractive = document.getElementById('btnShowInteractive');
+            const btnPng = document.getElementById('btnShowPng');
+
+            if (mode === 'png') {
+                interactiveEl.style.display = 'none';
+                pngEl.style.display = 'block';
+                btnPng.style.background = 'rgba(6,182,212,0.2)';
+                btnPng.style.borderColor = 'var(--cyan-accent)';
+                btnInteractive.style.background = 'rgba(255,255,255,0.05)';
+                btnInteractive.style.borderColor = 'var(--border-color)';
+            } else {
+                interactiveEl.style.display = 'grid';
+                pngEl.style.display = 'none';
+                btnInteractive.style.background = 'rgba(6,182,212,0.2)';
+                btnInteractive.style.borderColor = 'var(--cyan-accent)';
+                btnPng.style.background = 'rgba(255,255,255,0.05)';
+                btnPng.style.borderColor = 'var(--border-color)';
+            }
         }
 
         // View Switcher logic
