@@ -14,13 +14,14 @@
 本專案已部署於 GitHub Pages，提供動態下拉式選單與即時計算功能：
 👉 **[點此造訪 GitHub Pages 線上儀表板](https://chenyichencyc.github.io/1019_50startup/)**
 
-### 網頁主要功能：
-- **切換特徵分析視圖（下拉式選單）**：
-  1. 📈 **特徵數量評估與最佳化 (Sweet Spot)**：互動式 RMSE 與 R² 雙曲線圖與成果對照表
-  2. 🔬 **ANOVA F-test (Filter Method)**：各特徵 F 分數、p-value 與顯著性分級
-  3. 🔄 **RFE 遞迴特徵消除 (Wrapper Method)**：特徵淘汰歷史與優先保留排名
-  4. 🎯 **Lasso L1 正則化 (Embedded Method)**：最佳超參數 $\alpha = 1,825.83$ 下係數收縮至 0 的稀疏化視覺化
-  5. 🧮 **即時新創利潤預測器**：拖拉研發（R&D）與行銷（Marketing）支出即時預測利潤
+### 網頁主要功能與架構：
+- **首頁直接展示核心分析與預測器**：
+  - 📈 **特徵數量評估與最佳化 (Sweet Spot)**：可切換互動式 Chart.js 筆直折線圖與 Matplotlib 原生 PNG 圖，附完整 1~5 特徵評估指標數據表。
+  - 🧮 **即時新創利潤預測計算機**：拖動研發（R&D）與行銷（Marketing）支出滑桿，即時利用最佳回歸方程式預估獲利。
+- **三大特徵篩選方法深度分析（下拉式選單專屬切換）**：
+  1. 🔬 **ANOVA F-test (Filter Method 過濾法)**：各特徵 F 分數、p-value 統計顯著性長條圖與剖析
+  2. 🔄 **RFE 遞迴特徵消除 (Wrapper Method 包裝法)**：特徵淘汰輪次、保留排名與標準化說明
+  3. 🎯 **Lasso L1 正則化 (Embedded Method 嵌入法)**：最佳超參數 $\alpha = 1,825.83$ 下無效特徵係數收縮至 0.0 之稀疏化展示
 
 ---
 
