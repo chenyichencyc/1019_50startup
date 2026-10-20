@@ -1,6 +1,6 @@
 # 🚀 50 Startups 特徵工程與多元線性回歸利潤預測
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen?style=for-the-badge&logo=github)](https://chenyichencyc.github.io/1019_50startup/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-brightgreen?style=for-the-badge&logo=github)](https://chenyichencyc.github.io/HW2_multiple-linear-regression-Spotify-/#50startup)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F89939?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
@@ -11,8 +11,25 @@
 
 ## 🌐 線上互動展示儀表板 (Live Interactive Demo)
 
-本專案已部署於 GitHub Pages，提供動態下拉式選單與即時計算功能：
-👉 **[點此造訪 GitHub Pages 線上儀表板](https://chenyichencyc.github.io/1019_50startup/)**
+本專案已部署於 GitHub Pages，支援與 Spotify 專案即時切換瀏覽：
+👉 **[點此造訪 GitHub Pages 線上儀表板 (50 Startups 模式)](https://chenyichencyc.github.io/HW2_multiple-linear-regression-Spotify-/#50startup)**
+
+---
+
+## 🔄 雙專案切換功能 (Spotify ⇄ 50 Startups)
+
+本專案已與 **Spotify 音樂熱門度多元線性回歸分析** 深度整合於統一的 Web 展示平台中，使用者可透過網頁頂端按鈕或 URL Hash 標籤一鍵切換兩種不同的經典回歸情境：
+
+- 🚀 **[50 Startups 新創利潤特徵工程分析](https://chenyichencyc.github.io/HW2_multiple-linear-regression-Spotify-/#50startup)**：
+  - 聚焦於結構化商業投資資料（R&D、Marketing、Administration 與州別）。
+  - 評估特徵數量（1~5）之偏差-變異權衡，驗證 $k=2$ 為最佳模型（Sweet Spot）。
+  - 深度比較 ANOVA F-test、RFE 遞迴消除與 Lasso L1 正則化的篩選排序與權重收縮。
+  - 提供即時新創利潤預測計算機。
+- 🎵 **[Spotify 音樂熱門度回歸預測分析](https://chenyichencyc.github.io/HW2_multiple-linear-regression-Spotify-/#spotify)**：
+  - 探索千萬串流音訊特徵（Danceability、Energy、Loudness、Valence 等）對熱門度（Popularity）的影響。
+  - 提供高維度特徵篩選、模型指標比較與即時音樂人氣試算。
+
+---
 
 ### 網頁主要功能與架構：
 - **首頁直接展示核心分析與預測器**：
